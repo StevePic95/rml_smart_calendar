@@ -12,9 +12,9 @@ const MYSQL_USER = process.env.MYSQL_USER;
 const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD;
 const MYSQL_PORT = process.env.MYSQL_PORT;
 const MYSQL_DATABASE = process.env.MYSQL_DATABASE;
-const DB_TYPE = process.env.DB_TYPE;
+const NODE_ENV = process.env.NODE_ENV;
 
-if (DB_TYPE === "docker") {
+if (NODE_ENV === "development") {
 	const connection = mysql.createPool({
     	host: MYSQL_HOST_IP_OR_HOSTNAME,
     	user: MYSQL_USER,
@@ -22,7 +22,7 @@ if (DB_TYPE === "docker") {
     	database: MYSQL_DATABASE
 	});
 }
-else if (DB_TYPE === "host") {
+else if (NODE_ENV === "production") {
 	const connection = mysql.createConnection({
     	host: MYSQL_HOST_IP_OR_HOSTNAME,
     	user: MYSQL_USER,
@@ -32,7 +32,7 @@ else if (DB_TYPE === "host") {
 }
 else {
 	const connection = null;
-	console.error('DB_TYPE environment variable not set properly');
+	console.error('NODE_ENV environment variable not set properly');
 }
 
 connection.connect(function(err) {
