@@ -18,6 +18,7 @@
 
 !api/Dockerfile
 !api/index.js
+!api/dbController.js
 !api/package.json
 !api/package-lock.json
 !api/pm2.json
