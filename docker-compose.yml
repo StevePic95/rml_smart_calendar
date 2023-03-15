@@ -1,5 +1,5 @@
 version: '3.8'
-  # yooooooooooooooooooooooooooooooooooooooooo
+
 x-common-variables: &common-variables
   MYSQL_DATABASE: rainmanland-db
   MYSQL_USER: admin 
