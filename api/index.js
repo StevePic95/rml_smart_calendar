@@ -4,13 +4,7 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const path = require('path');
 
-// add MySQL database connection
-const db = mysql.createPool({
-    host: 'mysql_db', // the host name
-    user: 'admin', // the database user
-    password: 'admin', // database user password
-    database: 'rainmanland-db' // database name
-})
+const dbController = require('./dbController');
 
 // initialize the Express app
 const app = express();
@@ -22,13 +16,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// gives express access to the compiled front end code
-app.use(express.static(path.join(__dirname, 'build')))
-
 // [TEMPLATE] retrieve something from the database
 app.get('/get-something', (req, res) => {
     const SelectQuery = " SELECT * FROM table_name";
-    db.query(SelectQuery, (err, result) => {
+    dbController.query(SelectQuery, (err, result) => {
         res.send(result)
     })
 })
@@ -38,7 +29,7 @@ app.post('/insert-something', (req, res) => {
     const someField1 = req.body.setSomeField1;
     const someField2 = req.body.setSomeField2;
     const InsertQuery = "INSERT INTO table_name (field_name1, field_name2) VALUES (?, ?)";
-    db.query(InsertQuery, [someField1, someField2], (err, result) => {
+    dbController.query(InsertQuery, [someField1, someField2], (err, result) => {
         console.log(result)
     })
 })
@@ -47,7 +38,7 @@ app.post('/insert-something', (req, res) => {
 app.delete("/delete/:someId", (req, res) => {
     const someId = req.params.someId;
     const DeleteQuery = "DELETE FROM table_name WHERE id = ?";
-    db.query(DeleteQuery, bookId, (err, result) => {
+    dbController.query(DeleteQuery, bookId, (err, result) => {
         if (err) console.log(err);
     })
 })
@@ -57,7 +48,7 @@ app.put('/update/:someId', (req, res) => {
     const someField = req.body.someFieldUpdate;
     const someId = req.params.someId;
     const UpdateQuery = "UPDATE table_name SET field_name = ? WHERE id = ?";
-    db.query(UpdateQuery, [someField, someId], (err, result) => {
+    dbController.query(UpdateQuery, [someField, someId], (err, result) => {
         if (err) console.log(err)
     })
 })
@@ -68,7 +59,7 @@ app.post('/api/get-user-info', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const SelectQuery = "SELECT * FROM users WHERE email = ? AND password = ?";
-    db.query(SelectQuery, [email, password], (err, result) => {
+    dbController.query(SelectQuery, [email, password], (err, result) => {
         res.send(result);
     })
 })
@@ -78,17 +69,11 @@ app.get('/api/get-jobs/:crewNum', (req, res) => {
     const crewNum = req.params.crewNum
     // TODO: make this query actually do its job - this is just for the demo again
     const GetJobsQuery = "SELECT * FROM appointments";
-    db.query(GetJobsQuery, (err, result) => {
+    dbController.query(GetJobsQuery, (err, result) => {
         if (err) console.log(err);
         res.send(result);
     })
 })
-
-// Handles any requests that don't match the others. This is so react-router will handle any url that
-// isn't a request for data.
-app.get('/', (req,res) =>{
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
 
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })
