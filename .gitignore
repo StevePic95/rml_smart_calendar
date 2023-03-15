@@ -13,8 +13,8 @@
 !nginx/client/Dockerfile
 !nginx/client/package.json
 !nginx/client/package-lock.json
-!nginx/client/public/
-!nginx/client/src/
+!nginx/client/public/**
+!nginx/client/src/**
 
 !api/Dockerfile
 !api/index.js
