@@ -4,6 +4,7 @@
 !README.md
 !docker-compose.yml
 !pull-latest-and-deploy
+!compose-with-env
 !.gitignore
 !.gitattributes
 
