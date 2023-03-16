@@ -14,9 +14,9 @@ while getopts ":dps" opt; do
     p)
       arg_p=true
       ;;
-	s)
-	  arg_s=true
-	  ;;
+    s)
+      arg_s=true
+      ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
       exit 1
@@ -80,6 +80,7 @@ if [[ "$arg_s" == "true" ]]; then
   sudo docker-compose down & wait
 else
   docker-compose down & wait
+
 # Run the sudo docker-compose command based on the selected flag
 if [[ "$arg_d" == "true" ]]; then
   if [[ "$arg_s" == "true" ]]; then
