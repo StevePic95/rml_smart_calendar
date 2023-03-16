@@ -31,7 +31,7 @@ sudo docker-compose down & wait
 
 # 5. Run "docker-compose up --build -d" to build and start the containers in detached mode
 echo "Building and starting containers in detached mode..."
-sudo docker-compose up --build -d & wait
+sudo ./compose-with-env up --build -d & wait
 
 exit 0
 

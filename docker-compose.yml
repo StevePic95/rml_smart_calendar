@@ -1,5 +1,12 @@
 version: '3.8'
 
+x-common-variables: &common-variables
+  MYSQL_DATABASE: $MYSQL_DATABASE
+  MYSQL_USER: $MYSQL_USER 
+  MYSQL_PASSWORD: ""
+  MYSQL_HOST_IP: $MYSQL_HOST_IP
+  NODE_ENV: $NODE_ENV
+
 services:
 
   nginx:
@@ -20,4 +27,5 @@ services:
     volumes:
       - /app/node_modules
       - ./api:/app
-
+    environment:
+      <<: *common-variables
