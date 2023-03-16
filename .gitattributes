@@ -2,4 +2,5 @@
 docker-compose*.yml merge=ours
 Dockerfile* merge=ours
 default.conf merge=ours
+compose-with-env merge=ours
 
