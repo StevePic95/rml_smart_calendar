@@ -50,49 +50,69 @@ shift $((OPTIND-1))
 if [[ "$arg_d" == "true" ]]; then
   # Extract the development section from the .start-app-env file and set the.start-app-environment variables
   grep -A1000 '^# Development' .start-app-env | grep -B1000 '^# Production' | sed -e '1d;$d' | while read -r line; do
-    export "$line"
+    if [[ ! "$line" =~ ^#.* ]] && [[ -n "$line" ]]; then
+      export "$line"
+	  var_name="${line%%=*}"
+      echo "Exported: $var_name=${!var_name}"
+    fi
   done
+
+elif [[ "$arg_p" == "true" ]]; then
+  # Extract the production section from the .start-app-env file and set the.start-app-environment variables
+  grep -A1000 '^# Production' .start-app-env | while read -r line; do
+    # Ignore comments
+    if [[ ! "$line" =~ ^#.* ]] && [[ -n "$line" ]]; then
+      export "$line"
+	  var_name="${line%%=*}"
+      echo "Exported: $var_name=${!var_name}"
+    fi
+  done
+
   # Fetch the local IPv4 address using the AWS Metadata Service
   LOCAL_IPV4=$(curl -s --connect-timeout 5 http://169.254.169.254/latest/meta-data/local-ipv4)
-
   # Check if the curl command was successful
   if [[ $? -eq 0 ]] && [[ -n "$LOCAL_IPV4" ]]; then
     # Set the IP address as the MYSQL_HOST_IP_OR_HOSTNAME environment variable
     export MYSQL_HOST_IP_OR_HOSTNAME=$LOCAL_IPV4
+	var_name=MYSQL_HOST_IP_OR_HOSTNAME
+	echo "Changed $var_name to ${!var_name}"
   else
     # Print an error message and exit with status code 1
     echo "Error: Unable to fetch the local IPv4 address from the AWS Metadata Service." >&2
     exit 1
   fi
-elif [[ "$arg_p" == "true" ]]; then
-  # Extract the production section from the .start-app-env file and set the.start-app-environment variables
-  grep -A1000 '^# Production' .start-app-env | while read -r line; do
-    # Ignore comments
-    if [[ ! "$line" =~ ^#.* ]]; then
-      export "$line"
-    fi
-  done
 fi
 
+# Create a temporary environment file
+temp_env_file=$(mktemp)
+
+# Save the relevant environment variables to the temporary file
+env | grep -E 'MYSQL_DATABASE|MYSQL_USER|MYSQL_PASSWORD|MYSQL_HOST_IP_OR_HOSTNAME|NODE_ENV' > "$temp_env_file"
 
 # Remove any Docker containers that aren't in use
 if [[ "$arg_s" == "true" ]]; then
-  sudo docker-compose down & wait
+  sudo docker-compose -f docker-compose.prod.yml --env-file "$temp_env_file" down
+  sudo docker-compose -f docker-compose.dev.yml --env-file "$temp_env_file" down
 else
-  docker-compose down & wait
+  docker-compose -f docker-compose.prod.yml --env-file "$temp_env_file" down
+  docker-compose -f docker-compose.dev.yml --env-file "$temp_env_file" down
+fi
 
 # Run the sudo docker-compose command based on the selected flag
 if [[ "$arg_d" == "true" ]]; then
   if [[ "$arg_s" == "true" ]]; then
-    sudo docker-compose -f docker-compose.dev.yml up --build
+    sudo docker-compose -f docker-compose.dev.yml --env-file "$temp_env_file" up --build
   else
-	docker-compose -f docker-compose.dev.yml up --build
+	docker-compose -f docker-compose.dev.yml --env-file "$temp_env_file" up --build
   fi
 elif [[ "$arg_p" == "true" ]]; then
   if [[ "$arg_s" == "true" ]]; then
-    sudo docker-compose -f docker-compose.prod.yml up --build
+    sudo docker-compose -f docker-compose.prod.yml --env-file "$temp_env_file" up --build
   else
-	docker-compose -f docker-compose.prod.yml up --build
+    docker-compose -f docker-compose.prod.yml --env-file "$temp_env_file" up --build	
   fi
 fi
+
+# Remove the temporary environment file
+rm "$temp_env_file"
 
