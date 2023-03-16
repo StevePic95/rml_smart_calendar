@@ -3,7 +3,7 @@
 
 !README.md
 !docker-compose.yml
-!ship
+!pull-latest-and-deploy
 !.gitignore
 !.gitattributes
 
