@@ -2,8 +2,10 @@
 !*/
 
 !README.md
-!docker-compose.yml
+!docker-compose.prod.yml
+!docker-compose.dev.yml
 !pull-latest-and-deploy
+!start-app
 !compose-with-env
 !.gitignore
 !.gitattributes
