@@ -39,6 +39,18 @@ if [[ "$arg_d" == "true" ]]; then
   grep -A1000 '^# Development' .start-app-env | grep -B1000 '^# Production' | sed -e '1d;$d' | while read -r line; do
     export "$line"
   done
+  # Fetch the local IPv4 address using the AWS Metadata Service
+  LOCAL_IPV4=$(curl -s --connect-timeout 5 http://169.254.169.254/latest/meta-data/local-ipv4)
+
+  # Check if the curl command was successful
+  if [[ $? -eq 0 ]] && [[ -n "$LOCAL_IPV4" ]]; then
+    # Set the IP address as the MYSQL_HOST_IP_OR_HOSTNAME environment variable
+    export MYSQL_HOST_IP_OR_HOSTNAME=$LOCAL_IPV4
+  else
+    # Print an error message and exit with status code 1
+    echo "Error: Unable to fetch the local IPv4 address from the AWS Metadata Service." >&2
+    exit 1
+  fi
 elif [[ "$arg_p" == "true" ]]; then
   # Extract the production section from the .start-app-env file and set the.start-app-environment variables
   grep -A1000 '^# Production' .start-app-env | while read -r line; do

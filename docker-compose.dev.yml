@@ -3,8 +3,8 @@ version: '3.8'
 x-common-variables: &common-variables
   MYSQL_DATABASE: $MYSQL_DATABASE
   MYSQL_USER: $MYSQL_USER 
-  MYSQL_PASSWORD: ""
-  MYSQL_HOST_IP: $MYSQL_HOST_IP
+  MYSQL_PASSWORD: $MYSQL_PASSWORD
+  MYSQL_HOST_IP_OR_HOSTNAME: $MYSQL_HOST_IP_OR_HOSTNAME
   NODE_ENV: $NODE_ENV
 
 services:
@@ -28,14 +28,14 @@ services:
       - client
     restart: always
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       context: ./nginx
     ports:
       - "80:80"
 
   api:
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       context: ./api
     depends_on:
       - mysql_db
@@ -51,7 +51,7 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       context: ./nginx/client
     volumes:
       - /app/node_modules
