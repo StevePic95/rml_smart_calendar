@@ -3,9 +3,10 @@
 # Initialize variables to store flag values
 arg_d=false
 arg_p=false
+arg_s=false
 
 # Loop to parse command-line options using getopts
-while getopts ":dp" opt; do
+while getopts ":dps" opt; do
   case $opt in
     d)
       arg_d=true
@@ -13,6 +14,9 @@ while getopts ":dp" opt; do
     p)
       arg_p=true
       ;;
+	s)
+	  arg_s=true
+	  ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
       exit 1
@@ -20,14 +24,23 @@ while getopts ":dp" opt; do
   esac
 done
 
-# Check if both -d and -p flags are passed; if so, print an error message and exit with status code 1
-if [[ "$arg_d" == "true" ]] && [[ "$arg_p" == "true" ]]; then
-  echo "Error: Options -d and -p cannot be used together." >&2
+# Check if neither or both flags are set
+if { [ "$arg_d" = "false" ] && [ "$arg_p" = "false" ]; } || { [ "$arg_d" = "true" ] && [ "$arg_p" = "true" ]; }; then
+  echo "Error: Either -d or -p must be specified, but not both." >&2
   exit 1
-# Check if neither -d nor -p flags are passed; if so, print an error message and exit with status code 1
-elif [[ "$arg_d" == "false" ]] && [[ "$arg_p" == "false" ]]; then
-  echo "Error: One of the options -d or -p must be used." >&2
-  exit 1
+fi
+
+# If -p flag is set, check if the current git branch is "prod"
+if [ "$arg_p" = "true" ]; then
+  current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+
+  if [ $? -ne 0 ]; then
+    echo "Error: Failed to determine the current Git branch." >&2
+    exit 1
+  elif [ "$current_branch" != "prod" ]; then
+    echo "Error: The -p option can only be used when the current Git branch is named 'prod'." >&2
+    exit 1
+  fi
 fi
 
 # Remove the flags that have already been parsed
@@ -61,12 +74,24 @@ elif [[ "$arg_p" == "true" ]]; then
   done
 fi
 
+
+# Remove any Docker containers that aren't in use
+if [[ "$arg_s" == "true" ]]; then
+  sudo docker-compose down & wait
+else
+  docker-compose down & wait
 # Run the sudo docker-compose command based on the selected flag
 if [[ "$arg_d" == "true" ]]; then
-  sudo docker-compose -f docker-compose-development.yml up --build
+  if [[ "$arg_s" == "true" ]]; then
+    sudo docker-compose -f docker-compose.dev.yml up --build
+  else
+	docker-compose -f docker-compose.dev.yml up --build
+  fi
 elif [[ "$arg_p" == "true" ]]; then
-  sudo docker-compose -f docker-compose-production.yml up --build
+  if [[ "$arg_s" == "true" ]]; then
+    sudo docker-compose -f docker-compose.prod.yml up --build
+  else
+	docker-compose -f docker-compose.prod.yml up --build
+  fi
 fi
-
-# Rest of your script starts here
 
