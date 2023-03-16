@@ -10,16 +10,19 @@
 !.gitignore
 !.gitattributes
 
-!nginx/default.conf
-!nginx/Dockerfile
+!nginx/default.dev.conf
+!nginx/default.prod.conf
+!nginx/Dockerfile.dev
+!nginx/Dockerfile.prod
 
-!nginx/client/Dockerfile
+!nginx/client/Dockerfile.dev
 !nginx/client/package.json
 !nginx/client/package-lock.json
 !nginx/client/public/**
 !nginx/client/src/**
 
-!api/Dockerfile
+!api/Dockerfile.dev
+!api/Dockerfile.prod
 !api/index.js
 !api/dbController.js
 !api/package.json
