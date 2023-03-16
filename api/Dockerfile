@@ -6,6 +6,7 @@ COPY index.js .
 COPY package.json .
 COPY package-lock.json .
 COPY pm2.json .
+COPY dbController.js .
 
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn

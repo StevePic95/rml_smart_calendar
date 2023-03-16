@@ -14,8 +14,10 @@ const MYSQL_PORT = process.env.MYSQL_PORT;
 const MYSQL_DATABASE = process.env.MYSQL_DATABASE;
 const NODE_ENV = process.env.NODE_ENV;
 
+var connection = null;
+
 if (NODE_ENV === "development") {
-	const connection = mysql.createPool({
+	connection = mysql.createPool({
     	host: MYSQL_HOST_IP_OR_HOSTNAME,
     	user: MYSQL_USER,
     	password: MYSQL_PASSWORD,
@@ -23,16 +25,12 @@ if (NODE_ENV === "development") {
 	});
 }
 else if (NODE_ENV === "production") {
-	const connection = mysql.createConnection({
+	connection = mysql.createConnection({
     	host: MYSQL_HOST_IP_OR_HOSTNAME,
     	user: MYSQL_USER,
     	port: MYSQL_PORT,
     	database: MYSQL_DATABASE
 	});
-}
-else {
-	const connection = null;
-	console.error('NODE_ENV environment variable not set properly');
 }
 
 connection.connect(function(err) {
