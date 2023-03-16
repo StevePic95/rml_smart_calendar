@@ -1,6 +1,0 @@
-# ensure that pulling from dev into prod does not change these files in prod
-docker-compose*.yml merge=ours
-Dockerfile* merge=ours
-default.conf merge=ours
-compose-with-env merge=ours
-
