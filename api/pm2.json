@@ -3,20 +3,10 @@
   "script": "index.js",
   "instances": "2",
   "env": {
-    "NODE_ENV": "development",
-    "MYSQL_HOST_IP": "mysql_db",
-    "MYSQL_USER": "admin",
-	"MYSQL_PORT": "",
-    "MYSQL_PASSWORD": "admin",
-    "MYSQL_DATABASE": "rainmanland-db"
+    "NODE_ENV": "development"
   },
   "env_production": {
-    "NODE_ENV": "production",
-    "MYSQL_HOST_IP": "<EC2_HOST_IP_OR_HOSTNAME>",
-    "MYSQL_USER": "dev",
-	"MYSQL_PORT": "3306",
-    "MYSQL_PASSWORD": "",
-    "MYSQL_DATABASE": "rainmanland"
+    "NODE_ENV": "production"
   }
 }
 
