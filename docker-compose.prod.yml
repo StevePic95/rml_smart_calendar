@@ -1,0 +1,31 @@
+version: '3.8'
+
+x-common-variables: &common-variables
+  MYSQL_DATABASE: $MYSQL_DATABASE
+  MYSQL_USER: $MYSQL_USER 
+  MYSQL_PASSWORD: $MYSQL_PASSWORD
+  MYSQL_HOST_IP_OR_HOSTNAME: $MYSQL_HOST_IP_OR_HOSTNAME
+  NODE_ENV: $NODE_ENV
+
+services:
+
+  nginx:
+    depends_on:
+      - api
+    restart: always
+    build:
+      dockerfile: Dockerfile.prod
+      context: ./nginx
+    ports:
+      - "80:80"
+
+  api:
+    build:
+      dockerfile: Dockerfile.prod
+      context: ./api
+    volumes:
+      - /app/node_modules
+      - ./api:/app
+    environment:
+      <<: *common-variables
+
