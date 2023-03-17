@@ -6,6 +6,7 @@
 !docker-compose.dev.yml
 !pull-latest-and-deploy
 !start-app
+!start-app.ps1
 !compose-with-env
 !.gitignore
 !.gitattributes
