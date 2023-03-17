@@ -53,6 +53,14 @@ app.put('/update/:someId', (req, res) => {
     })
 })
 
+// Temorary test endpoint to check database connection
+app.get('/api/get-all-users', (req, res) => {
+    const SelectQuery = "SELECT * FROM rainmanland.user";
+    dbController.query(SelectQuery, (err, result) => {
+        res.send(result)
+    })
+})
+
 // Check credentials against db and return user info if credentials are good
 // TODO: make this secure by storing hashed passwords instead of plaintext. this is a placeholder for the demo
 app.post('/api/get-user-info', (req, res) => {
