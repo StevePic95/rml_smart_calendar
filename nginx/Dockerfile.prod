@@ -5,7 +5,7 @@ WORKDIR /app
 # Copy package.json and package-lock.json
 COPY client/package*.json ./
 # Copy the source code
-COPY ./ ./
+COPY client/* ./
 # Install dependencies
 RUN npm install
 # Build the React application
