@@ -4,8 +4,8 @@ FROM node:alpine AS build
 WORKDIR /app
 # Copy package.json and package-lock.json
 COPY client/package*.json ./
-# Copy the source code
-COPY client/* ./
+# Copy the entire source directory
+COPY client/. ./
 # Install dependencies
 RUN npm install
 # Build the React application
