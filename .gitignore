@@ -10,6 +10,7 @@
 !compose-with-env
 !.gitignore
 !.gitattributes
+!create-dummy-db.sql
 
 !nginx/default.dev.conf
 !nginx/default.prod.conf
