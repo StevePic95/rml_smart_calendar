@@ -14,9 +14,12 @@ const MYSQL_PORT = process.env.MYSQL_PORT;
 const MYSQL_DATABASE = process.env.MYSQL_DATABASE;
 const NODE_ENV = process.env.NODE_ENV;
 
+console.error(`MYSQL_HOST_IP_OR_HOSTNAME: ${MYSQL_HOST_IP_OR_HOSTNAME}\nMYSQL_USER: ${MYSQL_USER}\nMYSQL_PASSWORD: ${MYSQL_PASSWORD}\nMYSQL_PORT: ${MYSQL_PORT}\nMYSQL_DATABASE: ${MYSQL_DATABASE}\nNODE_ENV: ${NODE_ENV}`);
+
 var connection = null;
 
 if (NODE_ENV === "development") {
+	console.error("USING DEV SETTINGS TO CONNECT TO DB");
 	connection = mysql.createPool({
 		connectionLimit	: 10,
     	host            : MYSQL_HOST_IP_OR_HOSTNAME,
@@ -27,7 +30,7 @@ if (NODE_ENV === "development") {
 }
 
 else if (NODE_ENV === "production") {
-	console.error(`using host: 127.0.0.1, user: ${MYSQL_USER}, port: ${MYSQL_PORT}, database: ${MYSQL_DATABASE}.`)
+	console.error(`using host: 127.0.0.1, user: ${MYSQL_USER}, port: ${MYSQL_PORT}, database: ${MYSQL_DATABASE}.`);
 	connection = mysql.createPool({
 		connectionLimit : 10,
     	host            : "127.0.0.1",  // We use port forwarding to gaslight the Node container into thinking the MySQL database is running locally
