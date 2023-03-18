@@ -18,19 +18,21 @@ var connection = null;
 
 if (NODE_ENV === "development") {
 	connection = mysql.createPool({
-    	host: MYSQL_HOST_IP_OR_HOSTNAME,
-    	user: MYSQL_USER,
-    	password: MYSQL_PASSWORD,
-    	database: MYSQL_DATABASE
+		connectionLimit	: 10,
+    	host            : MYSQL_HOST_IP_OR_HOSTNAME,
+    	user            : MYSQL_USER,
+    	password        : MYSQL_PASSWORD,
+    	database        : MYSQL_DATABASE
 	});
 }
 
 else if (NODE_ENV === "production") {
-	connection = mysql.createConnection({
-    	host: MYSQL_HOST_IP_OR_HOSTNAME,
-    	user: MYSQL_USER,
-    	port: MYSQL_PORT,
-    	database: MYSQL_DATABASE
+	connection = mysql.createPool({
+		connectionLimit : 10,
+    	host            : MYSQL_HOST_IP_OR_HOSTNAME,
+    	user            : MYSQL_USER,
+    	port            : MYSQL_PORT,
+    	database        : MYSQL_DATABASE
 	});
 
 	connection.connect(function(err) {

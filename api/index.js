@@ -55,7 +55,7 @@ app.put('/update/:someId', (req, res) => {
 
 // Temorary test endpoint to check database connection
 app.get('/api/get-all-users', (req, res) => {
-    const SelectQuery = "SELECT * FROM rainmanland.user";
+    const SelectQuery = "SELECT * FROM user";
     dbController.query(SelectQuery, (err, result) => {
         res.send(result)
     })
