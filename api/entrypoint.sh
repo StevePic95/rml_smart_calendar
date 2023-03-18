@@ -13,7 +13,7 @@ ssh -N -L 127.0.0.1:${SSH_TUNNEL_CLIENT_PORT}:${MYSQL_HOST_IP_OR_HOSTNAME}:${MYS
 ssh_pid=$!
 
 # Start the application using pm2-runtime
-pm2-runtime start pm2.json
+pm2-runtime start pm2.json --env production
 
 # Terminate the SSH tunnel when the application exits
 kill $ssh_pid
