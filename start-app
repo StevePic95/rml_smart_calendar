@@ -66,16 +66,20 @@ elif [[ "$arg_p" == "true" ]]; then
   # Check if the curl command was successful
   if [[ $? -eq 0 ]] && [[ -n "$LOCAL_IPV4" ]]; then
 	echo "MYSQL_HOST_IP_OR_HOSTNAME=$LOCAL_IPV4" >> .env
-	echo "" >> .env
   else
     # Print an error message and exit with status code 1
     echo "Error: Unable to fetch the local IPv4 address from the AWS Metadata Service." >&2
     exit 1
   fi
 
+  # Get the private key
+  PRIVATE_KEY=$(cat ~/.ssh/id_rsa)
+  echo "PRIVATE_KEY=$PRIVATE_KEY" >> .env
+  echo "" >> .env
+
   echo "The following environment variables have been given to the docker-compose.prod.yml file:"
   echo ""
-  cat .env
+  awk -v private_key="$PRIVATE_KEY" '{gsub("PRIVATE_KEY="private_key, "PRIVATE_KEY= ¯\_(ツ)_/¯ "); print}' .env || echo "Error: Could not display .env without private key"
   echo "\n"
 
 fi
