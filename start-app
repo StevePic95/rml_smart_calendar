@@ -79,7 +79,7 @@ elif [[ "$arg_p" == "true" ]]; then
 
   echo "The following environment variables have been given to the docker-compose.prod.yml file:"
   echo ""
-  awk -v private_key="$PRIVATE_KEY" '{gsub("PRIVATE_KEY="private_key, "PRIVATE_KEY= ¯\_(ツ)_/¯ "); print}' .env || echo "Error: Could not display .env without private key"
+  awk -v private_key="$PRIVATE_KEY" '{gsub("PRIVATE_KEY="private_key, "PRIVATE_KEY= ¯\\_(ツ)_/¯ "); print}' .env || echo "Error: Could not display .env without private key"
   echo "\n"
 
 fi
