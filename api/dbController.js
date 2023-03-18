@@ -34,15 +34,16 @@ else if (NODE_ENV === "production") {
     	port            : MYSQL_PORT,
     	database        : MYSQL_DATABASE
 	});
-
-	connection.connect(function(err) {
-    	if (err) {
-        	console.error('Error connecting to database: ' + err.stack);
-        	return;
-    	}
-    	console.log('Connected to database with ID ' + connection.threadId);
-	});
 }
+
+connection.connect(function(err) {
+	if (err) {
+		console.error('Error connecting to database: ' + err.stack);
+		return;
+	}
+	console.log('Connected to database with ID ' + connection.threadId);
+});
+
 
 module.exports = connection;
 
