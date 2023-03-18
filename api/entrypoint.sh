@@ -3,8 +3,11 @@
 # Start the SSH agent
 eval "$(ssh-agent)"
 
+# add EC2 to known_hosts
+ssh-keyscan ${MYSQL_HOST_IP_OR_HOSTNAME} >> ~/.ssh/known_hosts
+
 # Establish the SSH tunnel
-ssh -N -L 0.0.0.0:${SSH_TUNNEL_CLIENT_PORT}:${MYSQL_HOST_IP_OR_HOSTNAME}:${MYSQL_PORT} -p 22 -i /app/id_rsa ${SSH_USERNAME}@${MYSQL_HOST_IP_OR_HOSTNAME} &
+ssh -N -L 0.0.0.0:${SSH_TUNNEL_CLIENT_PORT}:${MYSQL_HOST_IP_OR_HOSTNAME}:${MYSQL_PORT} -p 22 -i /root/.ssh/id_rsa ${SSH_USERNAME}@${MYSQL_HOST_IP_OR_HOSTNAME} &
 
 # Store the SSH tunnel process ID
 ssh_pid=$!
