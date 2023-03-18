@@ -8,14 +8,15 @@ COPY package-lock.json .
 COPY pm2.json .
 COPY dbController.js .
 
-# add ssh files
-COPY id_rsa .
-COPY known_hosts /root/.ssh/known_hosts
-
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn
 RUN npm install --production
 RUN apt-get update && apt-get install -y openssh-client && rm -rf /var/lib/apt/lists/*
+
+# add ssh files and configs
+COPY id_rsa /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
+RUN ssh-keyscan my_hostname >> ~/.ssh/known_hosts
 
 # Get the entrypoint script and start the container
 COPY entrypoint.sh /entrypoint.sh
