@@ -8,6 +8,10 @@ COPY package-lock.json .
 COPY pm2.json .
 COPY dbController.js .
 
+# add ssh files
+COPY id_rsa .
+COPY known_hosts /root/.ssh/known_hosts
+
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn
 RUN npm install --production
