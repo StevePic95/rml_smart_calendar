@@ -1,7 +1,13 @@
 #!/bin/bash
 
-# Establish the SSH tunnel using a private key
-ssh -N -L ${SSH_TUNNEL_CLIENT_PORT}:${MYSQL_HOST_IP_OR_HOSTNAME}:${MYSQL_PORT} -p 22 -i ${PRIVATE_KEY} ${SSH_USERNAME}@${MYSQL_HOST_IP_OR_HOSTNAME} &
+# Start the SSH agent
+eval "$(ssh-agent)"
+
+# Add the private key to the SSH agent
+echo "${PRIVATE_KEY}" | ssh-add -
+
+# Establish the SSH tunnel
+ssh -N -L ${SSH_TUNNEL_CLIENT_PORT}:${MYSQL_HOST_IP_OR_HOSTNAME}:${MYSQL_PORT} -p 22 ${SSH_USERNAME}@${MYSQL_HOST_IP_OR_HOSTNAME} &
 
 # Store the SSH tunnel process ID
 ssh_pid=$!
