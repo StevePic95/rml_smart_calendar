@@ -36,7 +36,7 @@ else if (NODE_ENV === "production") {
 	});
 }
 
-connection.connect(function(err) {
+connection.getConnection(function(err) {
 	if (err) {
 		console.error('Error connecting to database: ' + err.stack);
 		return;
