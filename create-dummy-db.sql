@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.32, for Linux (x86_64)
 --
--- Host: localhost    Database: rainmanland
+-- Host: localhost    Database: rainmanland-dev
 -- ------------------------------------------------------
 -- Server version	8.0.32-0ubuntu0.22.04.2
 
