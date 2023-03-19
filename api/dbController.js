@@ -35,6 +35,7 @@ else if (NODE_ENV === "production") {
 		connectionLimit : 10,
     	host            : "127.0.0.1",  // We use port forwarding to gaslight the Node container into thinking the MySQL database is running locally
     	user            : MYSQL_USER,
+		password        : MYSQL_PASSWORD,
     	port            : MYSQL_PORT,
     	database        : MYSQL_DATABASE
 	});
