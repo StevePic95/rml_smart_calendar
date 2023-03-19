@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Start the SSH agent
 eval "$(ssh-agent)"
