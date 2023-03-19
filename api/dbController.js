@@ -30,7 +30,7 @@ if (NODE_ENV === "development") {
 }
 
 else if (NODE_ENV === "production") {
-	console.error(`using host: 127.0.0.1, user: ${MYSQL_USER}, port: ${MYSQL_PORT}, database: ${MYSQL_DATABASE}.`);
+	console.error(`using host: 127.0.0.1, user: ${MYSQL_USER}, port: ${MYSQL_PORT}, database: ${MYSQL_DATABASE}, pass: ${MYSQL_PASSWORD}.`);
 	connection = mysql.createPool({
 		connectionLimit : 10,
     	host            : "127.0.0.1",  // We use port forwarding to gaslight the Node container into thinking the MySQL database is running locally
